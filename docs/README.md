@@ -2,10 +2,10 @@ Build a web app that reads from the data source and display them.
 
 ## UX/UI
 
-[Initial Load](firstload.png)
-[Search Version Number](search.png)
-[Search String](searchresults.png)
-[No Results](noresults.png)
+- [Initial Load](firstload.png)
+- [Search Version Number](search.png)
+- [Search String](searchresults.png)
+- [No Results](noresults.png)
 
 ___
 
