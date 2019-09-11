@@ -96,7 +96,7 @@ form {
       if (filter === '') return data;
 
       return data.filter((thisdata) => {
-        if (thisdata.version === filter) return true;
+        if (thisdata.version.includes(filter)) return true;
         return false;
       });
     }
