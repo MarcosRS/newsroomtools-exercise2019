@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Newsroom Development Code Exercise 2</title>
+
+<style type="text/css">
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+table {
+  margin: 0 auto;
+}
+
+tr:nth-child(even) {
+  background-color: #f4f4f4;
+}
+
+th {
+  text-align: left;
+  text-transform: uppercase;
+  border-bottom: 1px solid black;
+  text-align: center;
+}
+
+th, td {
+  padding: 10px;
+}
+
+input {
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  height: 1.5rem;
+  box-sizing: border-box;
+  padding: 5px 10px;
+}
+
+button {
+  background: black;
+  color: #fff;
+  appearance: none;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 1px solid black;
+  height: 1.5rem;
+  box-sizing: border-box;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 2rem;
+}
+
+</style>
+
+</head>
+<body>
+  <form id="searchform">
+    <input name="searchinput" id="searchinput" type="search" placeholder="version number" />
+    <button name="searchbutton" id="searchinput" type="search">Find version</button>
+  </form>
+  <div id="root"></div>
+
+  <script>
+
+    let allData = [];
+    let filteredData = [];
+
+    fetch("https://hanilim.github.io/newsroomtools-exercise2019/data.json")
+      .then(data => data.json())
+      .then(jsondata => {
+        // we are going to turn data into an array here
+        // because it's becoming a pain in the ass to keep track
+        allData = Object.keys(jsondata.versions).map((rowkey) => {
+          return {
+            version: rowkey,
+            time: jsondata.time[rowkey]
+          };
+        });
+
+        filteredData = allData;
+        populateTable(allData);
+      });
+
+    document.getElementById('searchform').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      filteredData = filterData(e.target[0].value, allData);
+      populateTable(filteredData);
+    });
+
+    function filterData(filter, data) {
+      if (filter === '') return data;
+
+      return data.filter((thisdata) => {
+        if (thisdata.version === filter) return true;
+        return false;
+      });
+    }
+
+    function populateTable(data) {
+
+      function generateRows(rowdata) {
+        if (rowdata.length === 0) return `
+          <tr>
+            <td colspan=2>No matching versions!</td>
+          </tr>
+        `;
+        return rowdata.map(row => `
+          <tr>
+            <td>${row.version}</td>
+            <td>${row.time}</td>
+          </tr>
+        `).join('');
+      }
+
+      const rows = generateRows(data);
+
+      document.getElementById('root').innerHTML = `
+        <table>
+          <tr>
+            <th>Version</th>
+            <th>Time</th>
+          </tr>
+          ${rows}
+        </table>
+      `;
+    }
+  </script>
+</body>
+</html>
